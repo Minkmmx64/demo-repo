@@ -1,0 +1,7 @@
+@import './index.less';
+
+.mergeMap(@KVLists, @block) {
+  each(@KVLists, .(@value, @key) {
+    .@{namespace}-@{block}-@{key} { position: @value; }
+  });
+}
