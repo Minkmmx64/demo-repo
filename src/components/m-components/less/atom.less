@@ -7,4 +7,59 @@
   sticky: sticky;
 }
 
-.mergeMap(@positionSet, pos);
+@sizeSet: { tiny: @size-tiny; middle: @size-middle; huge: @size-huge; }
+
+@primarySet: @primary @primary-middle @primary-tiny;
+@dangerSet: @danger @danger-middle @danger-tiny;
+@successSet: @success @success-middle @success-tiny;
+@warningSet: @warning @warning-middle @warning-tiny;
+
+.mergeMap(@positionSet, pos, position);
+
+// 设置原子样式
+each(@sizeSet, .(@value, @key) {
+  .@{namespace}-is-@{key} { 
+    height: @value;
+    line-height: @value;
+
+    &.@{namespace}-is-circle {
+      width: @value;
+      border-radius: @radius-circle;
+      padding: 0px;
+    }
+
+    &.@{namespace}-is-round { border-radius: @radius-round; }
+  }
+});
+
+.@{namespace}-is-danger {
+  background-color: extract(@dangerSet, 1);
+  &:hover { background-color: extract(@dangerSet, 2); }
+  &:active { background-color: extract(@dangerSet, 3); }
+  &:visited { background-color: extract(@dangerSet, 3); }
+}
+
+.@{namespace}-is-primary {
+  background-color: extract(@primarySet, 1);
+  &:hover { background-color: extract(@primarySet, 2); }
+  &:active { background-color: extract(@primarySet, 3); }
+  &:visited { background-color: extract(@primarySet, 3); }
+}
+
+.@{namespace}-is-success {
+  background-color: extract(@successSet, 1);
+  &:hover { background-color: extract(@successSet, 2); }
+  &:active { background-color: extract(@successSet, 3); }
+  &:visited { background-color: extract(@successSet, 3); }
+}
+
+.@{namespace}-is-warning {
+  background-color: extract(@warningSet, 1);
+  &:hover { background-color: extract(@warningSet, 2); }
+  &:active { background-color: extract(@warningSet, 3); }
+  &:visited { background-color: extract(@warningSet, 3); }
+}
+
+
+
+

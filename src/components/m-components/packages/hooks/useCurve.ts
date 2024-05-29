@@ -1,7 +1,7 @@
 import { cAF, rAF } from "../../utils/AF";
 import { curve, CurveKey, AnimCb } from "../const/curve";
 /**
- * @deprecated 直接调用 useCurve(终点,起点,过渡时间,过渡函数,回调) 直接开始动画
+ * @description 直接调用 useCurve(终点,起点,过渡时间,过渡函数,回调) 直接开始动画
  * @param to 终点
  * @param from 起始点
  * @param duration 过渡时间 (ms)

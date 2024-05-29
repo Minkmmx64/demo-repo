@@ -12,6 +12,22 @@ const routes: Array<RouteRecordRaw> = [
       title: "主页",
     },
   },
+  {
+    path: "/CanvasArea",
+    name: "CanvasArea",
+    component: () => import("@/views/demo/CanvasArea.vue"),
+    meta: {
+      title: "CanvasArea",
+    },
+  },
+  {
+    path: "/Test",
+    name: "Test",
+    component: () => import("@/views/LoginLoading.vue"),
+    meta: {
+      title: "Test",
+    },
+  },
 ]
 
 const router = createRouter({

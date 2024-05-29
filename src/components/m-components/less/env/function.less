@@ -1,7 +1,8 @@
 @import './index.less';
 
-.mergeMap(@KVLists, @block) {
+//设置 mi-block-key : { name: value; }
+.mergeMap(@KVLists, @block, @name) {
   each(@KVLists, .(@value, @key) {
-    .@{namespace}-@{block}-@{key} { position: @value; }
+    .@{namespace}-@{block}-@{key} { @{name}: @value; }
   });
 }

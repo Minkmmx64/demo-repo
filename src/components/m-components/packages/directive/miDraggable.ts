@@ -10,7 +10,7 @@ interface DirectiveBindingProps {
 export const miDraggable : ObjectDirective = {
   beforeMount: (el : HTMLElement, binding: DirectiveBinding<DirectiveBindingProps>) => {
     let start : Vector2;
-    const mousedown = () => {
+    const mousedown = (e: MouseEvent) => {
       if(el) {
         const { left, top, width, height } = el.getBoundingClientRect();
         if(isEmpty(start))
@@ -28,7 +28,7 @@ export const miDraggable : ObjectDirective = {
       if(binding.value)
         binding.value(end);
     }
-    const mouseup = () => {
+    const mouseup = (e: MouseEvent) => {
       window.removeEventListener("mousemove", mousemove)
       window.removeEventListener("mouseup", mouseup)
     }

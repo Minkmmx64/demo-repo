@@ -10,12 +10,11 @@
       </radialGradient>
     </defs>
     <g>
-      <circle v-draggable="onDraggable1" class="graphic" cx="400" cy="500" r="10" fill="url('#dragSuccess')" />
-      <circle v-draggable="onDraggable2" class="graphic" cx="600" cy="200" r="10" fill="url('#dragSuccess')" />
-      <circle v-draggable="onDraggable3" class="graphic" cx="800" cy="800" r="10" fill="url('#dragSuccess')" />
-      <circle v-draggable="onDraggable4" class="graphic" cx="1000" cy="800" r="10" fill="url('#dragSuccess')" />
-      <circle v-draggable="onDraggable5" class="graphic" cx="1200" cy="400" r="10" fill="url('#dragSuccess')" />
-      <circle v-draggable="onDraggable6" class="graphic" cx="1400" cy="500" r="10" fill="url('#dragSuccess')" />
+      <circle 
+        v-for="(item, index) in onDraggable" :key="index" 
+        v-draggable="item" class="graphic" 
+        :cx="(250) + index * 50" :cy="200" r="10" 
+        fill="url('#dragSuccess')" />
       <circle v-for="(item, index) in beziers" :key="index" class="graphic" :cx="item.x" :cy="item.y" r="1" fill="url('#dragDefault')" />
     </g>
   </svg>
@@ -25,17 +24,12 @@
 import { Bezier2Curve } from '@/components/m-components/packages/const/curve';
 import { Vector2 } from '@/components/m-components/packages/const/vector';
 
-import { ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 
 const vec2s = ref<Vector2[]>([]);
 const beziers = ref<Vector2[]>([]);
 
-const onDraggable1 = (e: Vector2) => { vec2s.value[0] = e; }
-const onDraggable2 = (e: Vector2) => { vec2s.value[1] = e; }
-const onDraggable3 = (e: Vector2) => { vec2s.value[2] = e; }
-const onDraggable4 = (e: Vector2) => { vec2s.value[3] = e; }
-const onDraggable5 = (e: Vector2) => { vec2s.value[4] = e; }
-const onDraggable6 = (e: Vector2) => { vec2s.value[5] = e; }
+const onDraggable = ref<((e: Vector2) => void)[]>([]);
 
 watchEffect(() => {
 
@@ -47,6 +41,12 @@ watchEffect(() => {
         beziers.value[j] = nextVec;
       }
     }
+  }
+});
+
+onMounted(() => {
+  for(let i = 0; i < 15; i ++){
+    onDraggable.value.push((e: Vector2) => { vec2s.value[i] = e; });
   }
 })
 
