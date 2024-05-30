@@ -8,7 +8,7 @@ export class LineEquation {
   getIntersection(LineP: LineEquation): number[] {
     const [ A1, B1, C1 ] = this.getP();
     const [ A2, B2, C2 ] = LineP.getP();
-    const y = -(A2 * C1 - C2 * A2) / (A2 * B1 - B2 * A2);
+    const y = -(A2 * C1 - C2 * A1) / (A2 * B1 - B2 * A1);
     const x = (C2 * B1 - B2 * C1) / (A1 * B2 - A2 * B1);
     return [x, y];
   }
@@ -19,5 +19,5 @@ export class LineEquation {
 }
 
 export const getVecToLineE = (A: Vector2, B: Vector2) : LineEquation => {
-  return new LineEquation(B.y - A.y, A.x - B.x, -((B.y - A.y) * A.x + (A.x - B.x) * A.y));
+  return new LineEquation(A.y - B.y, B.x - A.x, A.x*B.y - B.x * A.y);
 }
