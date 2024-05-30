@@ -23,14 +23,6 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
       baseCanvas.drawLine(start,point);
     }
     
-    // for(let i = 0 ; i < 20; i ++) {
-    //   const start: Vector2 = { x: 500 + i * 2, y: 0 };
-    //   console.log(getVecToLineE(start, { x: 500 + i * 2, y: area[0] }));
-    //   const point = triangle.getLineJD(getVecToLineE(start, { x: 500 + i * 2, y: area[0] }), start);
-    //   baseCanvas.drawLine(start,point);
-    // }
-
-    
     rAF(tran);
 
   }
