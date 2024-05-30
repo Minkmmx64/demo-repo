@@ -3,8 +3,15 @@ import Vec, { Vector2 } from "../../packages/const/vector";
 import { LineEquation } from "../equation/line";
 
 export class Triangle {
-
-  constructor(public V1: Vector2, public V2: Vector2, public V3: Vector2) {}
+  l1 : LineEquation;
+  l2 : LineEquation;
+  l3 : LineEquation;
+  constructor(public V1: Vector2, public V2: Vector2, public V3: Vector2) {
+    // 获取三角形三条边直线方程
+    this.l1 = LineEquation.defineLineFromTwoPoints(this.V1,this.V2);
+    this.l2 = LineEquation.defineLineFromTwoPoints(this.V2,this.V3);
+    this.l3 = LineEquation.defineLineFromTwoPoints(this.V3,this.V1);
+  }
 
   /**
    * 三角形重心
@@ -67,11 +74,8 @@ export class Triangle {
    * @param start 直线起点
    * @returns 返回交点坐标, 三角形直线方程 
    */
-  public getLineJD(line: LineEquation, start: Vector2): [Vector2, LineEquation] {
-    // 获取三角形三条边直线方程
-    const l1 = LineEquation.defineLineFromTwoPoints(this.V1,this.V2);
-    const l2 = LineEquation.defineLineFromTwoPoints(this.V2,this.V3);
-    const l3 = LineEquation.defineLineFromTwoPoints(this.V3,this.V1);
+  public getLineJD(line: LineEquation, start: Vector2, filter: LineEquation[] = []): [Vector2, LineEquation] {
+    const l1 = this.l1, l2 = this.l2, l3 = this.l3;
     //计算2直线交点
     const v1 = line.getIntersection(l1);
     const v2 = line.getIntersection(l2);
@@ -81,19 +85,20 @@ export class Triangle {
     // 2、对于一条 从 (x,y) => (x',y')的射线经过2点v1,v2，选择距离(x,y)最近的点就是第一个相交的点
     let mi = 0x3f3f3f3f3f3f;
     let ret : [Vector2, LineEquation ] = [{ x: -1, y: -1 }, new LineEquation(0,0,0) ];
-    if(v1.x >= min([this.V1.x, this.V2.x])! && v1.x <= max([this.V1.x, this.V2.x])!) {
+
+    if(v1.x >= min([this.V1.x, this.V2.x])! && v1.x <= max([this.V1.x, this.V2.x])! && !(filter.indexOf(l1) !== -1)) {
       if(Vec.dist(start, { x: v1.x, y: v1.y }) < mi) {
         ret = [{ x: v1.x, y: v1.y }, l1];
         mi = Vec.dist(start, { x: v1.x, y: v1.y });
       }
     }
-    if(v2.x >= min([this.V2.x, this.V3.x])! && v2.x <= max([this.V2.x, this.V3.x])!) {
+    if(v2.x >= min([this.V2.x, this.V3.x])! && v2.x <= max([this.V2.x, this.V3.x])! && !(filter.indexOf(l2) !== -1)) {
       if(Vec.dist(start, { x: v2.x, y: v2.y }) < mi) {
         ret = [{ x: v2.x, y: v2.y } , l2 ];
         mi = Vec.dist(start, { x: v2.x, y: v2.y });
       }
     }
-    if(v3.x >= min([this.V1.x, this.V3.x])! && v3.x <= max([this.V1.x, this.V3.x])!) {
+    if(v3.x >= min([this.V1.x, this.V3.x])! && v3.x <= max([this.V1.x, this.V3.x])! && !(filter.indexOf(l3) !== -1)) {
       if(Vec.dist(start, { x: v3.x, y: v3.y }) < mi) {
         ret = [{ x: v3.x, y: v3.y }, l3];
         mi = Vec.dist(start, { x: v2.x, y: v2.y });

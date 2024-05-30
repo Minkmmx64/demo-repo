@@ -4,6 +4,7 @@ import { BaseCanvas } from "@/components/m-components/utils/canvas/BaseCanvas";
 import { CanvasRender } from "@/components/m-components/utils/canvas/CanvasRender";
 import { Triangle } from "@/components/m-components/utils/canvas/Triangle";
 import { LineEquation } from "@/components/m-components/utils/equation/line";
+import { eq, random } from "lodash-unified";
 
 export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number[]) => {
   const baseCanvas = new BaseCanvas(ctx, area);
@@ -12,7 +13,7 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
 
   let triangle = new Triangle({x: 1000, y: 150}, { x: 600, y: 600 }, { x: 1400, y: 600 });
 
-  const play = (start: Vector2, end: Vector2) => {
+  const play = (start: Vector2, end: Vector2, index : number) => {
     //直线方程
     const line = LineEquation.defineLineFromTwoPoints(start, end);
     // 求三角形第一个相交的交点以及相交直线方程
@@ -35,18 +36,21 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
     const W = normal.getVector();
     const sin = Math.asin(Vec.vsin(V, W)) * 180 / Math.PI;
     const complexSin = sin / RefractiveIndex;
-    //console.log("入射角", sin, "折射角", complexSin);
-    // (x, (-A/B)x-(C/B))
+    
+    const RefrainLineClockwise = LineEquation.rotatePoint(normal, point, complexSin + index / 5); 
+    const RefrainLineAnticlockwise = LineEquation.rotatePoint(normal, point, 360 - complexSin - index / 5); 
+    //判断 入射直线 和 折射直线 是否在法线和三角形直线的同侧
   }
+
 
   const tran = () => {
     baseCanvas.recovery();
-    triangle = triangle.getRotate(0.1 ,triangle.getCore());
+    triangle = triangle.getRotate(0.05,triangle.getCore());
     baseCanvas.drawTriangle( triangle , new CanvasRender({ lineWidth: 5 }));
     for(let i = 0 ; i < 100; i ++) {
-      play({ x: 0, y: 400 + i * 1 / 10 }, { x: area[0], y: 400 + i * 1 / 10 }); 
-      play({ x: 1000 + i / 10, y: 0 }, { x: 1000 + i / 10, y: area[1] });
-      play({ x: area[0] + i / 10, y: 0 + i / 10}, { x: 0 + i / 10, y: area[1]+ i / 10 });
+      play({ x: 0, y: 400 + i * 1 / 10 }, { x: area[0], y: 400 + i * 1 / 10 }, i); 
+      play({ x: 1000 + i / 10, y: 0 }, { x: 1000 + i / 10, y: area[1] }, i);
+      play({ x: area[0] + i / 10, y: 0 + i / 10}, { x: 0 + i / 10, y: area[1]+ i / 10 }, i);
     }
     rAF(tran);
   }

@@ -1,5 +1,5 @@
 import { isFinite } from "lodash-unified";
-import { Vector2 } from "../../packages/const/vector";
+import Vec, { Vector2 } from "../../packages/const/vector";
 
 // 平面直线方程 Ax + by + c = 0
 export class LineEquation {
@@ -42,10 +42,12 @@ export class LineEquation {
   /**
    * 直线 绕 点 旋转 pi 度 的直线方程
    */
-  static rotatePoint(Line: LineEquation, vec: Vector2, rotate: number) {
-    const [ A, B, C ] = Line.getP();
-    // Ax + By + C = 0;
-    // 
+  static rotatePoint(Line: LineEquation, vec: Vector2, rotate: number) : LineEquation {
+    // Ax + By + C = 0; 
+    const [ vec1, vec2 ] = Line.getSpecialPoint();
+    const nextVec1 = Vec.rotate(vec1, vec, rotate);
+    const nextVec2 = Vec.rotate(vec2, vec, rotate);
+    return this.defineLineFromTwoPoints(nextVec1, nextVec2)
   }
 
   // 求2直线交点
@@ -76,5 +78,33 @@ export class LineEquation {
   public getK() : number {
     if(this.B == 0) return Infinity;
     return - this.A / this.B;
+  }
+
+  /**
+   * 获取2个特殊点
+   * x = 0, y = 0;
+   */
+  public getSpecialPoint(): Vector2[] {
+    // Ax + By + C = 0;
+    if(this.B === 0) {
+      return [
+        { x: this.A, y: 0 },
+        { x: this.A, y: 1 }
+      ]
+    }
+    return [
+      { x: 0, y : - this.C / this.B },
+      { x: - this.C / this.A, y: 0 }
+    ]
+  }
+
+  //根据y获取x
+  public getX(y: number) : number {
+    return (- this.C - this.B * y) / this.A;
+  }
+
+  //根据x获取y
+  public getY(x: number) : number {
+    return (- this.C - this.A * x) / this.B;
   }
 }
