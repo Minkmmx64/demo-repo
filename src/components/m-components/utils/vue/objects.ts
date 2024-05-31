@@ -1,9 +1,8 @@
 import { get, set } from 'lodash-unified'
-import type { Entries } from 'type-fest'
 import type { Arrayable } from './index'
 
 export const keysOf = <T extends object>(arr: T) => Object.keys(arr) as Array<keyof T>
-export const entriesOf = <T extends object>(arr: T) => Object.entries(arr) as Entries<T>
+export const entriesOf = <T extends object>(arr: T) => Object.entries(arr) as any
 export { hasOwn } from '@vue/shared'
 
 export const getProp = <T = any>(
