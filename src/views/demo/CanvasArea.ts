@@ -71,8 +71,8 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
       const nextW = nextNormal.getVector();
       const nextSin = Math.asin(Vec.vsin(nextV, nextW)) * 180 / Math.PI;
       const nextComplexSin = nextSin / RefractiveIndex;
-      const RefrainLineClockwise = LineEquation.rotatePoint(nextNormal, nextPoint, nextComplexSin); 
-      const RefrainLineAnticlockwise = LineEquation.rotatePoint(nextNormal, nextPoint, 360 - nextComplexSin);
+      const RefrainLineClockwise = LineEquation.rotatePoint(nextNormal, nextPoint, nextComplexSin + index / 10 ); 
+      const RefrainLineAnticlockwise = LineEquation.rotatePoint(nextNormal, nextPoint, 360 - nextComplexSin - index / 10 );
       
       //判断第三个点是否在st->ed向量延长线区域上
       const judge = (st: Vector2, ed: Vector2, cur: Vector2) : boolean => {
