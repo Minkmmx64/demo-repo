@@ -36,7 +36,7 @@ export class LineEquation {
    * 给一条直线 2个点 判断 2点是否在直线同一侧
    */
   static collinearSideJudger(Line: LineEquation, V: Vector2, W: Vector2): boolean {
-    return Line.getXYResult(V) * Line.getXYResult(W) > 0
+    return Line.getXYResult(V) * Line.getXYResult(W) >= 0
   }
   
   /**
