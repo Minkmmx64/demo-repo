@@ -1,18 +1,31 @@
 import Vec , { Vector2 } from "@/components/m-components/packages/const/vector";
-import { rAF } from "@/components/m-components/utils/AF";
+import { cAF, rAF } from "@/components/m-components/utils/AF";
 import { BaseCanvas } from "@/components/m-components/utils/canvas/BaseCanvas";
 import { CanvasRender } from "@/components/m-components/utils/canvas/CanvasRender";
 import { Triangle } from "@/components/m-components/utils/canvas/Triangle";
 import { LineEquation } from "@/components/m-components/utils/equation/line";
+import { ref } from "vue";
 
-export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number[]) => {
+export interface ICanvasAreaPlayGroundRT {
+  usePause: () => void;
+  usePlay: () => void;
+  preView: () => void;
+  nextView: () => void;
+}
+
+export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number[]) : ICanvasAreaPlayGroundRT => {
   const baseCanvas = new BaseCanvas(ctx, area);
   //折射率
   const RefractiveIndex = 2.5;
   const lw = 0.4;
   const total = 100;
+  let animLoop: number | void;
+  let rotate = 0.2;
+  let once = false;
 
   let triangle = new Triangle({x: 1000, y: 150}, { x: 600, y: 600 }, { x: 1400, y: 600 });
+
+  const isPause = ref(false);
 
   const play = (start: Vector2, end: Vector2, index : number) => {
     //直线方程
@@ -142,7 +155,7 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
 
   const tran = () => {
     baseCanvas.recovery();
-    triangle = triangle.getRotate(0.2,triangle.getCore());
+    triangle = triangle.getRotate(rotate,triangle.getCore());
     baseCanvas.drawTriangle( triangle , new CanvasRender({ lineWidth: 5 }));
     for(let i = 0 ; i < total; i ++) {
       //play({ x: 0, y: 400 + i * lw }, { x: area[0], y: 400 + i * lw }, i); 
@@ -151,9 +164,43 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
         play({ x: area[0] + i * 0.05, y: 0 + i * lw}, { x: 0 + i * 0.05 , y: area[1]+ i * lw }, i);
       }
     }
+    if(once) return;
+    animLoop = rAF(tran);
+  }
+
+  const usePause = () => {
+    isPause.value = true;
+    if(animLoop)
+      animLoop = cAF(animLoop)
+  }
+
+  const usePlay = () => {
+    if(animLoop) return;
+    animLoop = rAF(tran);
+    once = false;
+    rotate = 0.2;
+  }
+
+  const preView = () => {
+    if(!isPause.value) return;
+    rotate = 360 - 0.2;
+    once = true;
     rAF(tran);
   }
-  tran();
+
+  const nextView = () => {
+    if(!isPause.value) return;
+    rotate = 0.2;
+    once = true;
+    rAF(tran);
+  }
+
+  return {
+    usePause,
+    usePlay,
+    preView,
+    nextView
+  }
 }
 
 
