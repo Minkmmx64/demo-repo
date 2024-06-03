@@ -84,8 +84,8 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
       const nextW = nextNormal.getVector();
       const nextSin = Math.asin(Vec.vsin(nextV, nextW)) * 180 / Math.PI;
       const nextComplexSin = nextSin / RefractiveIndex;
-      const RefrainLineClockwise = LineEquation.rotatePoint(nextNormal, nextPoint, nextComplexSin + index / 10 ); 
-      const RefrainLineAnticlockwise = LineEquation.rotatePoint(nextNormal, nextPoint, 360 - nextComplexSin - index / 10 );
+      const RefrainLineClockwise = LineEquation.rotatePoint(nextNormal, nextPoint, nextComplexSin + (total - index) / 10 ); 
+      const RefrainLineAnticlockwise = LineEquation.rotatePoint(nextNormal, nextPoint, 360 - nextComplexSin - (total - index) / 10 );
       
       //判断第三个点是否在st->ed向量延长线区域上
       const judge = (st: Vector2, ed: Vector2, cur: Vector2) : boolean => {
@@ -126,31 +126,31 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
   
   const getRgb = (i: number) => {
     const full = total;    //数据总数
-    let r=0;
-    let g=0;
-    let b=0;
-    if(i<full/3){
-        r=255;
-        g=Math.ceil(255*3*i/full);
-        b=0;
-    }else if(i<full/2){
-        r=Math.ceil(750-i*(250*6/full));
-        g=255;
-        b=0;
-    }else if(i<full*2/3){
-        r=0;
-        g=255;
-        b=Math.ceil(i*(250*6/full)-750);
-    }else if(i<full*5/6){
-        r=0;
-        g=Math.ceil(1250-i*(250*6/full));
-        b=255;
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    if(i < full / 3){
+      r = 255;
+      g = Math.ceil(255 * 3 * i / full);
+      b = 0;
+    }else if(i < full / 2){
+      r = Math.ceil(750 - i * (250 * 6 / full));
+      g = 255;
+      b = 0;
+    }else if(i < full * 2 / 3){
+      r = 0;
+      g = 255;
+      b = Math.ceil(i * (250 * 6 / full) - 750);
+    }else if(i < full * 5 / 6){
+      r = 0;
+      g = Math.ceil(1250 - i * (250 * 6 / full));
+      b = 255;
     }else{
-        r=Math.ceil(150*i*(6/full)-750);
-        g=0;
-        b=255;
+      r = Math.ceil(150 * i * (6 / full) - 750);
+      g = 0;
+      b = 255;
     }
-    return 'rgb('+r+','+g+','+b+')';
+    return `rgb(${r}, ${g}, ${b})`;
   }
 
   const tran = () => {
@@ -162,6 +162,7 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
       let m = 2;
       while(m--){
         play({ x: area[0] + i * 0.05, y: 0 + i * lw}, { x: 0 + i * 0.05 , y: area[1]+ i * lw }, i);
+        play({ x: 0, y: i * 0.05}, { x: area[0] + i * 0.05 , y: area[1] + i * lw }, i);
       }
     }
     if(once) return;
@@ -195,6 +196,8 @@ export const CanvasAreaPlayGround = (ctx: CanvasRenderingContext2D, area: number
     rAF(tran);
   }
 
+  usePlay();
+  
   return {
     usePause,
     usePlay,
