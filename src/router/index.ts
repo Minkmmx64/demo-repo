@@ -21,13 +21,13 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/Test",
-    name: "Test",
-    component: () => import("@/views/LoginLoading.vue"),
+    path: "/DragArea",
+    name: "DragArea",
     meta: {
-      title: "Test",
+      title: "DragArea"
     },
-  },
+    component: () => import("@/views/demo/DragArea.vue")
+  }
 ]
 
 const router = createRouter({
